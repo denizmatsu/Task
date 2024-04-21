@@ -27,8 +27,11 @@ const handleCommentFormSubmit = async function () {
                 showNotification: true
             };
             try {
-                await sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification);
-                $('#complaint').val('');
+                await sendRequest(requestData).then(function (response) {
+                    if (response.succeeded) {
+                    $('#complaint').val('');
+                    }
+                });
             } catch (error) {
                 console.error(error);
             }
@@ -45,7 +48,7 @@ const GetComment = async function () {
         showNotification: false
     };
 
-    sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification)
+    sendRequest(requestData)
         .then(function (response) {
             populateCustomerOptions(response.data);
         })

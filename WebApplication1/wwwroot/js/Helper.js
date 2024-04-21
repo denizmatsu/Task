@@ -30,27 +30,23 @@
 }
 
 
-async function sendRequest(url, method, data, showNotification) {
+async function sendRequest(data) {
     $('#loading').show();
-    data = data || {};
-
     try {
         const response = await $.ajax({
-            url: url,
-            method: method,
-            data: JSON.stringify(data),
+            url: data.url,
+            method: data.method,
+            data: JSON.stringify(data.data),
             contentType: 'application/json'
         });
 
         $('#loading').hide();
-
-        if (showNotification) {
-            if (response.succeeded) {
+        if (response.succeeded) {
+            if (data.showNotification)
                 showToast(["İşlem Başarılı"]);
-            } else {
-                showToast(response.ErrorMessage);
-            }
         }
+        else
+            showToast(response.ErrorMessage);
 
         return response;
     } catch (error) {
@@ -59,3 +55,5 @@ async function sendRequest(url, method, data, showNotification) {
         throw error;
     }
 }
+
+

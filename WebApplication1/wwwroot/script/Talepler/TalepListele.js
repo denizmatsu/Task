@@ -34,20 +34,18 @@ const populateTaleplerTable = function (talepler) {
 const handleTaleplerRequest = async function () {
     try {
         showLoading();
-
         const requestData = {
             url: '/Talepler/GetTalepler',
             method: 'GET',
             data: null,
             showNotification: true
         };
-
-        const response = await sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification);
-        var talepler = response.data;
-
-        populateTaleplerTable(talepler);
-        showTaleplerTable();
-        hideLoading();
+        const response = await sendRequest(requestData).then(function (response) {
+            var talepler = response.data;
+            populateTaleplerTable(talepler);
+            showTaleplerTable();
+            hideLoading();
+        });
     } catch (error) {
         hideLoading();
         console.error(error);
