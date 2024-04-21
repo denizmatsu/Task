@@ -30,32 +30,32 @@
 }
 
 
-function sendRequest(url, method, data, showNotification) {
-    return new Promise(function (resolve, reject) {
-        $('#loading').show(); 
-        data = data || {};
+async function sendRequest(url, method, data, showNotification) {
+    $('#loading').show();
+    data = data || {};
 
-        $.ajax({
+    try {
+        const response = await $.ajax({
             url: url,
             method: method,
             data: JSON.stringify(data),
-            contentType: 'application/json',
-            success: function (response) {
-                $('#loading').hide(); 
-                if (showNotification) {
-                    if (response.succeeded) {
-                        showToast(["İşlem Başarılı"]);
-                    } else {
-                        showToast(response.ErrorMessage);
-                    }
-                }
-                resolve(response);
-            },
-            error: function (xhr, status, error) {
-                $('#loading').hide();
-                showToast(["İşlem Başarısız"]);
-                reject(error);
-            }
+            contentType: 'application/json'
         });
-    });
+
+        $('#loading').hide();
+
+        if (showNotification) {
+            if (response.succeeded) {
+                showToast(["İşlem Başarılı"]);
+            } else {
+                showToast(response.ErrorMessage);
+            }
+        }
+
+        return response;
+    } catch (error) {
+        $('#loading').hide();
+        showToast(["İşlem Başarısız"]);
+        throw error;
+    }
 }

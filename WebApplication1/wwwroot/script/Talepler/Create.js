@@ -1,30 +1,15 @@
-﻿$(document).ready(function () {
-    var requestData = {
-        url: '/Talepler/GetComments',
-        method: 'GET',
-        data: null,
-        showNotification: false
-    };
+﻿const populateCustomerOptions = async function (customers) {
+    var optionsHtml = '';
+    $.each(customers, function (index, customer) {
+        optionsHtml += '<option value="' + customer.id + '">' + customer.name + '</option>';
+    });
+    $('#customerId').html(optionsHtml);
+};
 
-        sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification)
-        .then(function (response) {
-            var customers = response.data;
-            var optionsHtml = '';
-            $.each(customers, function (index, customer) {
-                optionsHtml += '<option value="' + customer.id + '">' + customer.name + '</option>';
-            });
-            $('#customerId').html(optionsHtml);
-        })
-        .catch(function (error) {
-            console.log(error)
-        });
-    
+const handleCommentFormSubmit = async function () {
+    $('#comment-form').submit(async function (e) {
+        e.preventDefault();
 
-
-    $('#comment-form').submit(function (e) {
-        e.preventDefault(); // Normal form gönderimini engelle
-
-        // Form validasyonu
         if (this.checkValidity() === false) {
             e.stopPropagation();
         } else {
@@ -41,14 +26,36 @@
                 data: data,
                 showNotification: true
             };
-            sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification)
-                .then(function (response) {
-                })
-                .catch(function (error) {
-                });
+            try {
+                await sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification);
+                $('#complaint').val('');
+            } catch (error) {
+                console.error(error);
+            }
         }
-
         $(this).addClass('was-validated');
     });
+};
 
+const GetComment = async function () {
+    var requestData = {
+        url: '/Talepler/GetComments',
+        method: 'GET',
+        data: null,
+        showNotification: false
+    };
+
+    sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification)
+        .then(function (response) {
+            populateCustomerOptions(response.data);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    handleCommentFormSubmit();
+};
+
+$(document).ready(function () {
+    GetComment();
 });

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApplication1.Infostructure.Services;
 using WebApplication1.Models;
 using WebApplication1.Repository;
 
@@ -12,20 +13,18 @@ namespace WebApplication1
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            // HttpClientFactory'yi hizmetlere ekle
+            builder
+                .AddAppConfiguration()
+                .AddAppDbContext()
+                .AddAppControllers()
+                .AddAppRepositories()
+                ;
             builder.Services.AddHttpClient();
-
-            // ITaleplerRepository baðýmlýlýðýný ekleyin
-            builder.Services.AddScoped<ITaleplerRepository, TaleplerRepository>();
             builder.Services.AddControllersWithViews().AddFluentValidation();
             var app = builder.Build();
-
+            builder.Configuration.AddEnvironmentVariables();
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -42,7 +41,7 @@ namespace WebApplication1
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.UseCors("AllowAll");
             app.Run();
         }
     }

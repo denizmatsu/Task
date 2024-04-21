@@ -1,35 +1,57 @@
 ﻿$(document).ready(function () {
-    $('#loading').show(); 
-    var requestData = {
-        url: '/Talepler/GetTalepler',
-        method: 'GET',
-        data: null,
-        showNotification: true
-    };
-
-    var response = sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification)
-        .then(function (response) {
-            var talepler = response.data;
-            var tableBody = $('#taleplerTable tbody');
-            $.each(talepler, function (index, talep) {
-                var row = '<tr>' +
-                    '<td>' + talep.customerName + '</td>' +
-                    '<td>' + talep.complaint + '</td>' +
-                    '<td>' + talep.email + '</td>' +
-                    '<td>' + talep.body + '</td>' +
-                    '</tr>';
-                tableBody.append(row);
-            });
-
-            $('#taleplerTable').show(); 
-            $('#loading').hide(); 
-            console.log(response);
-        })
-        .catch(function (error) {
-            $('#loading').hide(); 
-            console.error(error);
-        });
-
-
-    
+    handleTaleplerRequest();
 });
+const showLoading = function () {
+    $('#loading').show();
+};
+
+const hideLoading = function () {
+    $('#loading').hide();
+};
+
+const showTaleplerTable = function () {
+    $('#taleplerTable').show();
+};
+
+const populateTaleplerTable = function (talepler) {
+    if ($('#taleplerTable').length) {
+        let table = new DataTable('#taleplerTable', {
+            responsive: true,
+            searching: true,
+            paging: true,
+            lengthMenu: [5, 10, 30, 50],
+            data: talepler,
+            columns: [
+                { data: 'customerName' },
+                { data: 'complaint' },
+                { data: 'email' },
+                { data: 'body' }
+            ]
+        });
+    }
+};
+
+const handleTaleplerRequest = async function () {
+    try {
+        showLoading();
+
+        const requestData = {
+            url: '/Talepler/GetTalepler',
+            method: 'GET',
+            data: null,
+            showNotification: true
+        };
+
+        const response = await sendRequest(requestData.url, requestData.method, requestData.data, requestData.showNotification);
+        var talepler = response.data;
+
+        populateTaleplerTable(talepler);
+        showTaleplerTable();
+        hideLoading();
+    } catch (error) {
+        hideLoading();
+        console.error(error);
+    }
+};
+
+
