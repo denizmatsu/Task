@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Talep Oluştur";
+}
+
+<h1>Talep Oluştur</h1>
+
+<div class="container">
+    <form id="comment-form">
+        <div class="mb-3">
+            <label for="customerId" class="form-label">Customer Name:</label>
+            <select class="form-select" id="customerId" required>
+            </select>
+            <div class="invalid-feedback">Please select a customer.</div>
+        </div>
+        <div class="mb-3">
+            <label for="complaint" class="form-label">Complaint:</label>
+            <textarea class="form-control" id="complaint" rows="3" required></textarea>
+            <div class="invalid-feedback">Please enter a complaint.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/script/Talepler/Create.js"></script>
+}

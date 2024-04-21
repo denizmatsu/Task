@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Talep Listesi";
+}
+
+<h1>Talep Listesi</h1>
+
+<div class="d-flex justify-content-center mb-3">
+    <div class="spinner-border text-primary" role="status" id="loading" style="display:none;">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<table class="table table-striped" id="taleplerTable" style="display:none;">
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Complaint</th>
+            <th>Email</th>
+            <th>Body</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/script/Talepler/TalepListele.js"></script>
+}
