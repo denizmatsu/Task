@@ -7,12 +7,10 @@ namespace WebApplication1.Infostructure.Services
     {
         public static WebApplicationBuilder AddAppDbContext(this WebApplicationBuilder builder)
         {
-            // Get Configuration
             IConfiguration configuration = builder.Configuration;
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            // Add DbContext
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 

@@ -6,7 +6,6 @@ namespace WebApplication1.Infostructure.Services
     {
         public static WebApplicationBuilder AddAppRepositories(this WebApplicationBuilder builder)
         {
-            // Add STI Repository
             builder.Services.AddScoped<ITaleplerRepository, TaleplerRepository>();
 
             return builder;

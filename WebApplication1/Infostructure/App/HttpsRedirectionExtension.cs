@@ -4,7 +4,6 @@
     {
         public static WebApplication UseAppHttpsRedirection(this WebApplication app)
         {
-            // Add HttpsRedirection
             app.UseHttpsRedirection();
 
             return app;

@@ -4,7 +4,6 @@
     {
         public static WebApplication UseAppControllers(this WebApplication app)
         {
-            // Add Controllers
             app.MapControllers();
 
             return app;
